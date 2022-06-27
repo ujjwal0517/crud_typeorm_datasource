@@ -18,30 +18,50 @@ export class commentController{
         }
     }
     static getAllComment =async (req:Request, res:Response)=>{
-        const result =await AppDataSource.getRepository(Comment).find()
-        res.json(result)
+        try{
+
+            const result =await AppDataSource.getRepository(Comment).find()
+            res.json(result)
+        }catch(err){
+            res.json({message:err.message})
+        }
     }
     static getCommentById = async (req:Request, res:Response)=>{
         const id = Number(req.params.id);
-        const result = await AppDataSource.getRepository(Comment).findOneBy({id:id})
-        res.json(result)
+        try{
+
+            const result = await AppDataSource.getRepository(Comment).findOneBy({id:id})
+            res.json(result)
+        }catch(err){
+            res.json(err.message)
+        }
     }
     static updateComment = async( req:Request, res:Response)=>{
         const id = Number(req.params.id);
-        const existingComment = await AppDataSource.getRepository(Comment).findOneByOrFail({id:id})
-        const updatedComment = req.body
-        const comment = {...existingComment, ...updatedComment}
-            
-            const result = await AppDataSource.getRepository(Comment).save(comment)
-            res.json(result)
-      
-        res.status(404).json("Comment Not found")
+        try{
+
+            const existingComment = await AppDataSource.getRepository(Comment).findOneByOrFail({id:id})
+            const updatedComment = req.body
+            const comment = {...existingComment, ...updatedComment}
+                
+                const result = await AppDataSource.getRepository(Comment).save(comment)
+                res.json(result)
+          
+        }
+        catch(err){
+            res.json(err.message)
+        }
       
     }
     static deleteComment = async(req:Request, res:Response)=>{
-        const id = Number(req.params.id);
-        const deletedComment = await AppDataSource.getRepository(Comment).delete(id)
-        res.json({message:"Comment Deleted successfully"})
+        try{
+
+            const id = Number(req.params.id);
+            const deletedComment = await AppDataSource.getRepository(Comment).delete(id)
+            res.json({message:"Comment Deleted successfully"})
+        }catch(err){
+            res.json(err.message)
+        }
     }
    
 
